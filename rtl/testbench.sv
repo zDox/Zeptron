@@ -1,12 +1,9 @@
 module testbench();
 
-    logic   clk, reset;
+    logic clk, reset;
 
-    logic [31:0]    writedata, dataadr;
-    logic           memwrite;
 
-    top dut(.clk(clk), .reset(reset), .writedata(writedata),
-            .dataadr(dataadr), .memwrite(memwrite));
+    top dut(.clk(clk), .reset(reset));
 
     initial
         begin
@@ -22,7 +19,5 @@ module testbench();
     // check results
     always @(negedge clk)
         begin
-            if (memwrite) begin
-            end
         end
 endmodule
