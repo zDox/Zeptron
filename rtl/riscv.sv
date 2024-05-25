@@ -24,6 +24,7 @@ module riscv (  input   logic           clk, reset,
 
     // Writeback Stage declerations
     logic [16:0]    w_controls;
+    logic           w_regwrite;
 
 
     // Instruction Fetch Stage
@@ -34,7 +35,7 @@ module riscv (  input   logic           clk, reset,
                                 // Interconnects to Instruction Memory
                                 .mem_i_rd(mem_i_rd), .mem_i_ra(mem_i_ra),
                                 // Outputs
-                                .f_instr(f_instr));
+                                .instr(f_instr), .pc(f_pc));
 
     if_id_register reg_stage1(  // Inputs
                                 .clk(clk), .reset(reset),
@@ -44,7 +45,7 @@ module riscv (  input   logic           clk, reset,
 
 
     // Instruction Decode Stage
-    decode_stage stage2(        .d_instr(d_instr), .d_controls(d_controls));
+    decode_stage stage2(        .instr(d_instr), .controls(d_controls));
     id_ex_register reg_stage2(  // Inputs
                                 .clk(clk), .reset(reset),
                                 .d_instr(d_instr), .d_pc(d_pc),

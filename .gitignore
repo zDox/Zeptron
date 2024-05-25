@@ -1,0 +1,8 @@
+rtl/work
+rtl/transcript
+rtl/*.do
+*.wlf
+*.bak
+*.mpf
+*.mti
+*.vstf

@@ -1,5 +1,5 @@
-module decode_stage(    input   logic [31:0]    d_instr,
-                        output  logic [16:0]    d_controls);
+module decode_stage(    input   logic [31:0]    instr,
+                        output  logic [16:0]    controls);
     logic [3:0]     d_alu_op;
     logic [2:0]     d_dataout_src;
     logic [1:0]     d_alu_srca, d_mem_d_wdsrc;
