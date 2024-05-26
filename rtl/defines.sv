@@ -55,7 +55,7 @@
 `define FUNCT3_FENCE  3'b000
 `define FUNCT3_FENCEI 3'b001
 
-//================== Instruction funct7 in RISC-V ================== 
+//================== Instruction funct7 in RISC-V ==================
 `define FUNCT7_SLLI 7'b0000000
 // SRLI_SRAI
 `define FUNCT7_SRLI 7'b0000000
@@ -73,15 +73,14 @@
 `define FUNCT7_OR  7'b0000000
 `define FUNCT7_AND 7'b0000000
 
-//================== AluSel ================== 
-`define EXE_RES_LOGIC       3'b001
-`define EXE_RES_SHIFT       3'b010
-`define EXE_RES_MOVE        3'b011
-`define EXE_RES_NOP         3'b000
-`define EXE_RES_ARITH       3'b100
-`define EXE_RES_MUL         3'b101
-`define EXE_RES_JUMP_BRANCH 3'b110
-`define EXE_RES_LOAD_STORE  3'b111
+//================== AluSrcA ==================
+`define EXE_ALUSRCA_RRD1    2'b00
+`define EXE_ALUSRCA_ZERO    2'b01
+`define EXE_ALUSRCA_PC      2'b10
+
+//================== AluSrcB ==================
+`define EXE_ALUSRCB_RRD2    1'b0
+`define EXE_ALUSRCB_IMM     1'b1
 
 //================== AluOp ==================
 
@@ -117,7 +116,23 @@
 `define EXE_SH_OP  26
 `define EXE_SW_OP  27
 
-//==================  Hardware Properties ================== 
+
+//==================    Data Memory Write Source Multiplexer
+`define EXE_MEMWDSRC_B  2'b01
+`define EXE_MEMWDSRC_H  2'b01
+`define EXE_MEMWDSRC_W  2'b10
+
+
+//==================    Data Memory dataout Multiplexer
+`define EXE_DATAOUTSRC_ALUY     3'b000
+`define EXE_DATAOUTSRC_PC4      3'b001
+`define EXE_DATAOUTSRC_RD32     3'b010
+`define EXE_DATAOUTSRC_RDS16    3'b011
+`define EXE_DATAOUTSRC_RDZ16    3'b100
+`define EXE_DATAOUTSRC_RDS8     3'b101
+`define EXE_DATAOUTSRC_RDZ8     3'b110
+
+//==================  Hardware Properties ==================
 
 // Instruction Memory
 `define InstAddrBus 31:0 

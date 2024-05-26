@@ -1,6 +1,7 @@
 module riscv (  input   logic           clk, reset,
                 input   logic [31:0]    mem_i_rd, mem_d_rd,
                 output  logic           mem_d_we,
+                output  logic           mem_d_wdsrc,
                 output  logic [31:0]    mem_d_wa, mem_d_wd,
                 output  logic [31:0]    mem_i_ra);
 
@@ -80,7 +81,7 @@ module riscv (  input   logic           clk, reset,
                                 .rdd2(m_rdd2), .pc_4(m_pc_4),
                                 // Interconnects to Data Memory
                                 .mem_rd(mem_d_rd), .mem_we(mem_d_we), .mem_wa(mem_d_wa),
-                                .mem_wd(mem_d_wd),
+                                .mem_wd(mem_d_wd), .mem_wdsrc(mem_d_wdsrc),
                                 // Output
                                 .dataout(m_dataout));
     dm_wb_register reg_stage4(  // Inputs
