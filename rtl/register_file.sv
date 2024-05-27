@@ -1,4 +1,4 @@
-module register_file(input logic        clk,
+module register_file(input logic        clk, reset,
                      input logic        we3,
                      input logic[4:0]   ra1, ra2, wa3,
                      input logic[31:0]  wd3,

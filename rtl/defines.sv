@@ -103,6 +103,14 @@
 `define EXE_BLTU_OP 14
 `define EXE_BGEU_OP 15
 
+//================= Immediate Generator Op
+`define IMMG_OP_R   1
+`define IMMG_OP_I   2
+`define IMMG_OP_S   3
+`define IMMG_OP_B   4
+`define IMMG_OP_U   5
+`define IMMG_OP_J   6
+
 //==================    Data Memory Write Source Multiplexer
 `define EXE_MEMWDSRC_B  2'b01
 `define EXE_MEMWDSRC_H  2'b01
@@ -121,28 +129,21 @@
 //==================  Hardware Properties ==================
 
 // Instruction Memory
-`define InstAddrBus 31:0 
-`define InstBus 31:0
-`define InstMemNum 131072
-`define InstMemNumLog2 17
+`define INSTR_ADDR_BUS 31:0
+`define INSTR_BUS 31:0
 
 // Register File
-`define RegAddrBus 4:0
-`define RegBus 31:0
-`define RegNum 32
-`define RegNumLog2 5
+`define REG_ADDR_BUS 4:0
+`define REG_BUS 31:0
 
 // ALU
-`define AluOpBus 7:0
-`define AluSelBus 2:0
+`define ALUOP_BUS 3:0
+`define ALU_SRCA_SEL 2:0
+`define IMMG_OP_BUS 2:0
 
 // Memory
-`define MemAddrBus 31:0
-`define MemAddrWidth 32
-`define MemDataBus 31:0
-`define MemDataWidth 32
-`define ByteBus 7:0
-`define DataMemNum 131072
-`define DataMemNumLog2 17
+`define MEM_ADDR_BUS 31:0
+`define MEM_DATA_BUS 31:0
+`define MEM_BE_BUS 7:0
 
 `endif

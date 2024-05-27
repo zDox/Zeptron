@@ -1,4 +1,4 @@
-module mux2   #(parameter int WIDTH=8)
+module mux2   #(parameter int WIDTH=32)
                (input   logic[WIDTH-1:0]  d0, d1,
                 input   logic           s,
                 output  logic[WIDTH-1:0]  y);

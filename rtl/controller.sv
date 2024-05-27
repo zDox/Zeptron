@@ -16,6 +16,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_U;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -29,6 +30,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_U;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -42,6 +44,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_PC4;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_J;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b1;
@@ -55,6 +58,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_PC4;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_J;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b1;
                 controls.jump =         1'b1;
@@ -67,6 +71,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  3'bxxx;
                 controls.reg_we =        1'b0;
+                controls.immg_op =      `IMMG_OP_B;
                 controls.branch =       1'b1;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -83,12 +88,13 @@ module controller ( input   logic [6:0]     op,
             end
 
             `OP_LOAD: begin
-                controls.alu_op =       1'bx;
+                controls.alu_op =       `EXE_ADD_OP;
                 controls.alu_srca =     `EXE_ALUSRCA_RRD1;
                 controls.alu_srcb =     `EXE_ALUSRCB_IMM;
                 controls.mem_d_wdsrc =  2'bxx;
                 controls.mem_d_we =     1'b0;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_I;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -104,12 +110,13 @@ module controller ( input   logic [6:0]     op,
             end
 
             `OP_STORE: begin
-                controls.alu_op =       1'bx;
+                controls.alu_op =       `EXE_ADD_OP;
                 controls.alu_srca =     `EXE_ALUSRCA_RRD1;
                 controls.alu_srcb =     `EXE_ALUSRCB_IMM;
                 controls.mem_d_we =     1'b1;
                 controls.dataout_src =  3'bxxx;
                 controls.reg_we =        1'b0;
+                controls.immg_op =      `IMMG_OP_S;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -128,6 +135,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_I;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -156,6 +164,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
+                controls.immg_op =      `IMMG_OP_R;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -191,6 +200,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b0;
+                controls.immg_op =      4'bxxxx;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -204,6 +214,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b0;
+                controls.immg_op =      4'bxxxx;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
@@ -217,6 +228,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b0;
+                controls.immg_op =      4'bxxxx;
                 controls.branch =       1'b0;
                 controls.jalr =         1'b0;
                 controls.jump =         1'b0;
