@@ -17,9 +17,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_U;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
             end
 
             `OP_AUIPC: begin
@@ -31,59 +29,51 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_U;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
             end
 
             `OP_JAL: begin
                 controls.alu_op =       `EXE_ADD_OP;
-                controls.alu_srca =     2'bxx;
-                controls.alu_srcb =     2'bxx;
+                controls.alu_srca =     `EXE_ALUSRCA_PC;
+                controls.alu_srcb =     `EXE_ALUSRCB_IMM;
                 controls.mem_d_wdsrc =  2'bxx;
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_PC4;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_J;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b1;
+                controls.bj_op =        `EXE_BJOP_JUMP;
             end
 
             `OP_JALR: begin
                 controls.alu_op =       `EXE_ADD_OP;
-                controls.alu_srca =     2'bxx;
-                controls.alu_srcb =     2'bxx;
+                controls.alu_srca =     `EXE_ALUSRCA_RRD1;
+                controls.alu_srcb =     `EXE_ALUSRCB_IMM;
                 controls.mem_d_wdsrc =  2'bxx;
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_PC4;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_J;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b1;
-                controls.jump =         1'b1;
+                controls.bj_op =        `EXE_BJOP_JUMP;
             end
 
             `OP_BRANCH: begin
-                controls.alu_srca =     `EXE_ALUSRCA_RRD1;
-                controls.alu_srcb =     `EXE_ALUSRCB_RRD2;
+                controls.alu_op =       `EXE_ADD_OP;
+                controls.alu_srca =     `EXE_ALUSRCA_PC;
+                controls.alu_srcb =     `EXE_ALUSRCB_IMM;
                 controls.mem_d_wdsrc =  2'bxx;
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  3'bxxx;
                 controls.reg_we =        1'b0;
                 controls.immg_op =      `IMMG_OP_B;
-                controls.branch =       1'b1;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
 
                 case (funct3)
-                    `FUNCT3_BEQ:    controls.alu_op =   `EXE_BEQ_OP;
-                    `FUNCT3_BNE:    controls.alu_op =   `EXE_BNE_OP;
-                    `FUNCT3_BLT:    controls.alu_op =   `EXE_BLT_OP;
-                    `FUNCT3_BGE:    controls.alu_op =   `EXE_BGE_OP;
-                    `FUNCT3_BLTU:   controls.alu_op =   `EXE_BLTU_OP;
-                    `FUNCT3_BGEU:   controls.alu_op =   `EXE_BGEU_OP;
-                    default :       controls.alu_op =   4'bxxxx;
+                    `FUNCT3_BEQ:    controls.bj_op =    `EXE_BJOP_BEQ;
+                    `FUNCT3_BNE:    controls.bj_op =    `EXE_BJOP_BNE;
+                    `FUNCT3_BLT:    controls.bj_op =    `EXE_BJOP_BLT;
+                    `FUNCT3_BGE:    controls.bj_op =    `EXE_BJOP_BGE;
+                    `FUNCT3_BLTU:   controls.bj_op =    `EXE_BJOP_BLTU;
+                    `FUNCT3_BGEU:   controls.bj_op =    `EXE_BJOP_BGEU;
+                    default :       controls.bj_op =    `EXE_BJOP_NOOP;
                 endcase
             end
 
@@ -95,9 +85,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_we =     1'b0;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_I;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
 
                 case (funct3)
                     `FUNCT3_LB:     controls.dataout_src =  `EXE_DATAOUTSRC_RDS8;
@@ -117,9 +105,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  3'bxxx;
                 controls.reg_we =        1'b0;
                 controls.immg_op =      `IMMG_OP_S;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
 
                 case (funct3)
                     `FUNCT3_SB:     controls.mem_d_wdsrc =  `EXE_MEMWDSRC_B;
@@ -136,9 +122,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_I;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
 
                 case (funct3)
                     `FUNCT3_ADDI:       controls.alu_op =   `EXE_ADD_OP;
@@ -165,9 +149,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b1;
                 controls.immg_op =      `IMMG_OP_R;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
 
                 case (funct3)
                     `FUNCT3_ADD_SUB:    begin
@@ -201,9 +183,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b0;
                 controls.immg_op =      4'bxxxx;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
             end
 
             `OP_ILLEGAL_L: begin // illegal
@@ -215,9 +195,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b0;
                 controls.immg_op =      4'bxxxx;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
             end
 
             default: begin // Not implimented
@@ -229,9 +207,7 @@ module controller ( input   logic [6:0]     op,
                 controls.dataout_src =  `EXE_DATAOUTSRC_ALUY;
                 controls.reg_we =        1'b0;
                 controls.immg_op =      4'bxxxx;
-                controls.branch =       1'b0;
-                controls.jalr =         1'b0;
-                controls.jump =         1'b0;
+                controls.bj_op =        `EXE_BJOP_NOOP;
             end
         endcase
 endmodule

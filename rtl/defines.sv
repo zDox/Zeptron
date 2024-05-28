@@ -83,7 +83,6 @@
 `define EXE_ALUSRCB_IMM     1'b1
 
 //================== AluOp ==================
-
 `define EXE_ADD_OP  0
 `define EXE_SUB_OP  1
 `define EXE_XOR_OP  2
@@ -96,12 +95,15 @@
 `define EXE_SLT_OP  8
 `define EXE_SLTU_OP 9
 
-`define EXE_BEQ_OP  10
-`define EXE_BNE_OP  11
-`define EXE_BLT_OP  12
-`define EXE_BGE_OP  13
-`define EXE_BLTU_OP 14
-`define EXE_BGEU_OP 15
+//================= Jump_Branch Control
+`define EXE_BJOP_NOOP   0
+`define EXE_BJOP_JUMP   1
+`define EXE_BJOP_BEQ    2
+`define EXE_BJOP_BNE    3
+`define EXE_BJOP_BLT    4
+`define EXE_BJOP_BGE    5
+`define EXE_BJOP_BLTU   6
+`define EXE_BJOP_BGEU   7
 
 //================= Immediate Generator Op
 `define IMMG_OP_R   1
@@ -136,14 +138,17 @@
 `define REG_ADDR_BUS 4:0
 `define REG_BUS 31:0
 
-// ALU
-`define ALUOP_BUS 3:0
-`define ALU_SRCA_SEL 2:0
-`define IMMG_OP_BUS 2:0
-
 // Memory
 `define MEM_ADDR_BUS 31:0
 `define MEM_DATA_BUS 31:0
 `define MEM_BE_BUS 7:0
+
+// Control Signal
+`define ALU_OP_BUS 3:0
+`define ALU_SRCA_SEL 2:0
+`define IMMG_OP_BUS 2:0
+`define BJ_OP_BUS 2:0
+`define DATAOUT_SRC_BUS 2:0
+`define MEM_D_WDSRC_BUS 2:0
 
 `endif

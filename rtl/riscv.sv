@@ -2,13 +2,13 @@
 
 
 module riscv (  input   logic                   clk, reset,
-                input   logic [`INSTR_BUS]       mem_i_rd,
-                input   logic [`MEM_DATA_BUS]    mem_d_rd,
+                input   logic [`INSTR_BUS]      mem_i_rd,
+                input   logic [`MEM_DATA_BUS]   mem_d_rd,
                 output  logic                   mem_d_we,
-                output  logic [`MEM_BE_BUS]      mem_d_wdbe,
-                output  logic [`MEM_ADDR_BUS]    mem_d_wa,
-                output  logic [`MEM_DATA_BUS]    mem_d_wd,
-                output  logic [`INSTR_ADDR_BUS]  mem_i_ra);
+                output  logic [`MEM_BE_BUS]     mem_d_wdbe,
+                output  logic [`MEM_ADDR_BUS]   mem_d_wa,
+                output  logic [`MEM_DATA_BUS]   mem_d_wd,
+                output  logic [`INSTR_ADDR_BUS] mem_i_ra);
 
     // Instruction Fetch Stage declerations
     logic [31:0]    f_instr, f_pc;
@@ -19,17 +19,17 @@ module riscv (  input   logic                   clk, reset,
 
     // Execute Stage declerations
     logic [31:0]    e_instr, e_pc;
-    controlsgs_if    e_controls();
-    logic [31:0]    e_alu_y, e_rdd2, e_pc_4, e_pc_imm;
+    controlsgs_if   e_controls();
+    logic [31:0]    e_alu_y, e_rdd2, e_pc_4;
     logic           e_b_taken;
 
     // Data Memory Stage declerations
     logic [31:0]    m_alu_y, m_rdd2, m_pc_4;
-    controlsgs_if    m_controls();
+    controlsgs_if   m_controls();
     logic           m_rd;
 
     // Writeback Stage declerations
-    controlsgs_if    w_controls();
+    controlsgs_if   w_controls();
     logic           w_regwrite;
 
 
@@ -37,7 +37,7 @@ module riscv (  input   logic                   clk, reset,
     fetch_stage stage1(         // Inputs
                                 .clk(clk), .reset(reset),
                                 .e_b_taken(e_b_taken),
-                                .e_pc_imm(e_pc_imm), .e_pc_4(e_pc_4),
+                                .e_alu_y(e_alu_y), .e_pc_4(e_pc_4),
                                 // Interconnects to Instruction Memory
                                 .mem_i_rd(mem_i_rd), .mem_i_ra(mem_i_ra),
                                 // Outputs
@@ -67,11 +67,11 @@ module riscv (  input   logic                   clk, reset,
                                 // Inputs from Stage Register EX/WB
                                 .regwe(w_regwe), .regwa(w_rd), .regwd(w_dataout),
                                 // Outputs to Stage Register EX/DM
-                                .alu_y(e_alu_y), .rdd2(e_rdd2),
-                                .rd(e_rd),
+                                .rdd2(e_rdd2), .rd(e_rd),
                                 // Outputs to Stage IF
-                                .pc_4(e_pc_4), .pc_imm(e_pc_imm),
-                                .b_taken(e_b_taken));
+                                .pc_4(e_pc_4), .b_taken(e_b_taken),
+                                // Outputs to IF and DM
+                                .alu_y(e_alu_y));
 
     ex_dm_register reg_stage3(  // Inputs
                                 .clk(clk), .reset(reset),

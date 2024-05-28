@@ -1,6 +1,6 @@
 `include "defines.sv"
 
-module executtion_stage(// Inputs from General
+module execution_stage(// Inputs from General
                         input   logic                   clk, reset,
                         // Inputs from ID
                         input   logic [`INSTR_BUS]      instr, pc,
@@ -9,16 +9,17 @@ module executtion_stage(// Inputs from General
                         input   logic                   regwe,
                         input   logic [`REG_ADDR_BUS]   regwa,
                         input   logic [`REG_BUS]        regwd,
+                        // Output to IF and DM
+                        output  logic [`MEM_DATA_BUS]   alu_y,
                         // Outputs to DM
-                        output  logic [`MEM_DATA_BUS]   alu_y, rdd2,
+                        output  logic [`MEM_DATA_BUS]   rdd2,
                         output  logic [`REG_ADDR_BUS]   rd,
                         // Outputs to IF
-                        output  logic [`INSTR_ADDR_BUS] pc_4, pc_imm,
+                        output  logic [`INSTR_ADDR_BUS] pc_4,
                         output  logic                   b_taken);
     logic [`REG_ADDR_BUS]   rs1, rs2;
     logic [`REG_BUS]        rrd1, imm;
     logic [`REG_BUS]        srca, srcb;
-    logic                   alu_zero;
 
     // Determine rs1 and rs2
     assign rs1 = instr[19:15];
@@ -35,14 +36,12 @@ module executtion_stage(// Inputs from General
     mux4                mux_srca(   .d1(rrd1), .d2({32{1'b0}}), .d3(pc), .y(srca));
     mux2                mux_srcb(   .d1(rrd2), .d2(imm), .y(srcb));
     alu                 alu(        .a(srca), .b(srcb), .alu_op(controls.alu_op),
-                                    .zero(alu_zero), .y(alu_y));
+                                    .y(alu_y));
 
-    jump_control        jc(         .jump(controls.jump), .branch(controls.jump),
+    jump_control        jc(         .bj_op(controls.bj_op),
+                                    .srca(srca), .srcb(srcb),
                                     .b_taken(b_taken));
 
     // PC_4 and PC_IMM calculation
-    mux2 #(32)          jalr_mux(   .a(pc), .b(rrd1), .s(controls.jalr),
-                                    .y(pc_or_rrd1));
-    adder               adder_1(    .a(imm), .b(pc_or_rrd1), .y(pc_imm));
-    adder               adder_2(    .a(pc), .b(4), .y(pc_4));
+    adder               add_pc4(    .a(pc), .b(4), .y(pc_4));
 endmodule
