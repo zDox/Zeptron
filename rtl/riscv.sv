@@ -1,14 +1,14 @@
 `include "defines.sv"
 
 
-module riscv (  input   logic                   clk, reset,
-                input   logic [`INSTR_BUS]      mem_i_rd,
-                input   logic [`MEM_DATA_BUS]   mem_d_rd,
-                output  logic                   mem_d_we,
-                output  logic [`MEM_BE_BUS]     mem_d_wdbe,
-                output  logic [`MEM_ADDR_BUS]   mem_d_wa,
-                output  logic [`MEM_DATA_BUS]   mem_d_wd,
-                output  logic [`INSTR_ADDR_BUS] mem_i_ra);
+module riscv (  input   logic                       clk, reset,
+                input   logic [`INSTR_BUS]          mem_i_rd,
+                input   logic [`MEM_DATA_BUS]       mem_d_rd,
+                output  logic                       mem_d_we,
+                output  logic [`MEM_WMASK_BUS]      mem_d_wmask,
+                output  logic [`MEM_ADDR_BUS]       mem_d_a,
+                output  logic [`MEM_DATA_BUS]       mem_d_wd,
+                output  logic [`INSTR_ADDR_BUS]     mem_i_ra);
 
     // Instruction Fetch Stage declerations
     logic [31:0]    f_instr, f_pc;
@@ -75,9 +75,11 @@ module riscv (  input   logic                   clk, reset,
 
     ex_dm_register reg_stage3(  // Inputs
                                 .clk(clk), .reset(reset),
+                                .e_controls(e_controls),
                                 .e_alu_y(e_alu_y), .e_rrd2(e_rdd2), .e_pc_4(e_pc_4),
                                 .e_rd(e_rd),
                                 // Outputs
+                                .m_controls(m_controls),
                                 .m_alu_y(m_alu_y), .m_rdd2(m_rdd2), .m_pc_4(m_pc_4),
                                 .m_rd(m_rd));
 
@@ -87,8 +89,8 @@ module riscv (  input   logic                   clk, reset,
                                 .controls(m_controls), .alu_y(m_alu_y),
                                 .rdd2(m_rdd2), .pc_4(m_pc_4),
                                 // Interconnects to Data Memory
-                                .mem_rd(mem_d_rd), .mem_we(mem_d_we), .mem_wa(mem_d_wa),
-                                .mem_wd(mem_d_wd), .mem_d_wdbe(mem_d_wdbe),
+                                .mem_rd(mem_d_rd), .mem_we(mem_d_we), .mem_a(mem_d_a),
+                                .mem_wd(mem_d_wd), .mem_wmask(mem_d_wmask),
                                 // Output
                                 .dataout(m_dataout));
     dm_wb_register reg_stage4(  // Inputs

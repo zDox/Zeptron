@@ -51,7 +51,7 @@ module controller ( input   logic [6:0]     op,
                 controls.mem_d_wdsrc =  2'bxx;
                 controls.mem_d_we =     1'b0;
                 controls.dataout_src =  `EXE_DATAOUTSRC_PC4;
-                controls.reg_we =        1'b1;
+                controls.reg_we =       1'b1;
                 controls.immg_op =      `IMMG_OP_J;
                 controls.bj_op =        `EXE_BJOP_JUMP;
             end
