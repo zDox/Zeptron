@@ -1,7 +1,7 @@
 `include "controlsgs.sv"
 
 
-module decode_stage_testbench;
+module decode_stage_tb;
 
     logic [31:0] instr;
 

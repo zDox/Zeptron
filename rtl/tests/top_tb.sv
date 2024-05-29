@@ -1,4 +1,4 @@
-module testbench();
+module top_tb();
 
     logic clk, reset;
 

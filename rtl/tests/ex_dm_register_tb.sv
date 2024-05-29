@@ -1,7 +1,7 @@
 `include "controlsgs.sv"
 
 
-module ex_dm_register_testbench;
+module ex_dm_register_tb;
 
     logic clk, reset, enable;
     logic [31:0] e_alu_y, m_alu_y;

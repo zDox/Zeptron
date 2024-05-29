@@ -62,7 +62,7 @@ module riscv (  input   logic                       clk, reset,
 
 
     // Execute Stage
-    execute_stage stage3(       // Inputs from Stage Register IF/ID
+    execution_stage stage3(      // Inputs from Stage Register IF/ID
                                 .instr(e_instr), .pc(e_pc), .controls(e_controls),
                                 // Inputs from Stage Register EX/WB
                                 .regwe(w_regwe), .regwa(w_rd), .regwd(w_dataout),
@@ -93,7 +93,9 @@ module riscv (  input   logic                       clk, reset,
                                 .mem_wd(mem_d_wd), .mem_wmask(mem_d_wmask),
                                 // Output
                                 .dataout(m_dataout));
-    dm_wb_register reg_stage4(  // Inputs
+
+    dm_wb_register reg_stage4(  .clk(clk), .reset(reset),
+                                // Inputs
                                 .m_controls(m_controls),
                                 .m_dataout(m_dataout),
                                 .m_rd(m_rd),
@@ -102,6 +104,6 @@ module riscv (  input   logic                       clk, reset,
                                 .w_dataout(w_dataout),
                                 .w_rd(w_rd));
 
-    writeback_stage stage5(     .w_controls(w_controls),
-                                .w_regwrite(w_regwrite));
+    writeback_stage stage5(     .controls(w_controls),
+                                .regwrite(w_regwrite));
 endmodule
