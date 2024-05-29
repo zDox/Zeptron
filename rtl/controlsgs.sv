@@ -1,7 +1,10 @@
+`ifndef CONTROLSGS_SV
+`define CONTROLSGS_SV
+
 `include "defines.sv"
 
 
-interface controlsgs_if;
+typedef struct packed {
     // ALU Control
     logic [`ALU_OP_BUS]         alu_op;
     logic [`ALU_SRCA_SEL]       alu_srca;
@@ -16,17 +19,6 @@ interface controlsgs_if;
     // Control Flow Control
     logic [`BJ_OP_BUS]          bj_op; // branch and jump operator
 
-    task static set_default();
-    begin
-        alu_op       = '0;
-        alu_srca     = '0;
-        alu_srcb     = 0;
-        immg_op      = '0;
-        mem_d_wdsrc  = '0;
-        mem_d_we     = 0;
-        dataout_src  = '0;
-        reg_we       = 0;
-        bj_op        = '0;
-    end
-    endtask
-endinterface
+}   controlsgs_t;
+
+`endif

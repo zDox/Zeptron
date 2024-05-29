@@ -1,8 +1,13 @@
+`include "controlsgs.sv"
+
+
 module decode_stage_testbench;
 
     logic [31:0] instr;
-    controlsgs_if   controlsgs_io();
-    decode_stage dut(.instr(instr), .controlsgs_io(controlsgs_io));
+
+    controlsgs_t  controlsgs;
+
+    decode_stage dut(.instr(instr), .controlsgs(controlsgs));
 
 
    // Define the memory array to hold the instructions
@@ -23,7 +28,7 @@ module decode_stage_testbench;
 
     // Monitor signals (optional)
     initial begin
-        $monitor("At time %0t, instr = %h, control = %p", $time, instr, controlsgs_io);
+        $monitor("At time %0t, instr = %h, control = %p", $time, instr, controlsgs);
     end
 
 endmodule

@@ -106,12 +106,12 @@
 `define EXE_BJOP_BGEU   7
 
 //================= Immediate Generator Op
-`define IMMG_OP_R   1
-`define IMMG_OP_I   2
-`define IMMG_OP_S   3
-`define IMMG_OP_B   4
-`define IMMG_OP_U   5
-`define IMMG_OP_J   6
+`define IMMG_OP_R   0
+`define IMMG_OP_I   1
+`define IMMG_OP_S   2
+`define IMMG_OP_B   3
+`define IMMG_OP_U   4
+`define IMMG_OP_J   5
 
 //==================    Data Memory Write Source Multiplexer
 `define EXE_MEMWDSRC_B  2'b01
@@ -145,7 +145,7 @@
 
 // Control Signal
 `define ALU_OP_BUS 3:0
-`define ALU_SRCA_SEL 2:0
+`define ALU_SRCA_SEL 1:0
 `define IMMG_OP_BUS 2:0
 `define BJ_OP_BUS 2:0
 `define DATAOUT_SRC_BUS 2:0
