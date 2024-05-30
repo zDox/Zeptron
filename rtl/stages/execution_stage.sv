@@ -1,10 +1,11 @@
 `include "defines.sv"
+`include "controlsgs.sv"
 
 module execution_stage(// Inputs from General
                         input   logic                   clk, reset,
                         // Inputs from ID
                         input   logic [`INSTR_BUS]      instr, pc,
-                        controlsgs_if                   controls,
+                        input   controlsgs_t            controlsgs,
                         // Inputs from WB
                         input   logic                   regwe,
                         input   logic [`REG_ADDR_BUS]   regwa,
@@ -12,7 +13,7 @@ module execution_stage(// Inputs from General
                         // Output to IF and DM
                         output  logic [`MEM_DATA_BUS]   alu_y,
                         // Outputs to DM
-                        output  logic [`MEM_DATA_BUS]   rdd2,
+                        output  logic [`MEM_DATA_BUS]   rrd2,
                         output  logic [`REG_ADDR_BUS]   rd,
                         // Outputs to IF
                         output  logic [`INSTR_ADDR_BUS] pc_4,
@@ -29,16 +30,21 @@ module execution_stage(// Inputs from General
                                     .ra1(rs1), .ra2(rs2),
                                     .wa3(regwa), .wd3(regwd), .we3(regwe),
                                     .rd1(rrd1), .rd2(rrd2));
-    immediate_generator ig (        .instr(instr), .y(imm));
+    immediate_generator ig (        .instr(instr), .immg_op(controlsgs.immg_op),
+                                    .imm(imm));
 
 
     // ALU
-    mux4                mux_srca(   .d1(rrd1), .d2({32{1'b0}}), .d3(pc), .y(srca));
-    mux2                mux_srcb(   .d1(rrd2), .d2(imm), .y(srcb));
-    alu                 alu(        .a(srca), .b(srcb), .alu_op(controls.alu_op),
+    mux4                mux_srca(   .d0(rrd1), .d1({32{1'b0}}), .d2(pc),
+                                    .s(controlsgs.alu_srca),
+                                    .y(srca));
+    mux2                mux_srcb(   .d0(rrd2), .d1(imm),
+                                    .s(controlsgs.alu_srcb),
+                                    .y(srcb));
+    alu                 alu(        .a(srca), .b(srcb), .op(controlsgs.alu_op),
                                     .y(alu_y));
 
-    jump_control        jc(         .bj_op(controls.bj_op),
+    jump_control        jc(         .bj_op(controlsgs.bj_op),
                                     .srca(srca), .srcb(srcb),
                                     .b_taken(b_taken));
 

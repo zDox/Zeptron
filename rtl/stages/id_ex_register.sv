@@ -1,11 +1,14 @@
+`include "controlsgs.sv"
+
+
 module id_ex_register(  input   logic           clk, reset, enable,
                         input   logic [31:0]    d_instr, d_pc,
-                        input   logic [16:0]    d_controls,
+                        input   controlsgs_t    d_controlsgs,
                         output  logic [31:0]    e_instr, e_pc,
-                        output  logic [16:0]    e_controls);
+                        output  controlsgs_t    e_controlsgs);
     logic [80:0] d_bundle, e_bundle;
 
-    assign d_bundle = {d_instr, d_pc, d_controls};
+    assign d_bundle = {d_instr, d_pc, d_controlsgs};
 
     always_ff @(posedge clk or posedge reset)
         if (reset) begin
@@ -15,5 +18,5 @@ module id_ex_register(  input   logic           clk, reset, enable,
             e_bundle <= d_bundle;
         end
 
-    assign {e_instr, e_pc, e_controls} = e_bundle;
+    assign {e_instr, e_pc, e_controlsgs} = e_bundle;
 endmodule

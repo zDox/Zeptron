@@ -1,17 +1,25 @@
+`include "defines.sv"
+
+
 module top(input logic clk, reset);
-    logic [31:0]    fpc, finstr, memwriteaddress, memwritedata,
-                    memreaddata;
-    logic           m_memwe;
+    logic [`MEM_DATA_BUS]   instr, mem_d_wd, mem_d_rd;
+    logic [`MEM_ADDR_BUS]   mem_d_a, pc;
+    logic [`MEM_WMASK_BUS]  mem_d_wmask;
+    logic                   mem_d_we;
 
     riscv riscv(.clk(clk), .reset(reset),
-                .finstr(finstr),
-                .memreaddata(memreaddata),
-                .m_memwe(m_memwe),
-                .memwriteaddress(memwriteaddress),
-                .memwritedata(memwritedata),
-                .fpc(fpc));
+                .mem_i_rd(instr),
+                .mem_d_rd(mem_d_rd),
+                .mem_d_we(mem_d_we),
+                .mem_d_wmask(mem_d_wmask),
+                .mem_d_a(mem_d_a),
+                .mem_d_wd(mem_d_wd),
+                .mem_i_ra(pc));
 
-    imem imem(  .clk(clk), .a(fpc), .rd(finstr));
-    dmem dmem(  .clk(clk), .we(m_memwe), .a(memwriteaddress[31:2]),
-                .wd(memwritedata), .rd(memreaddata));
+    imem imem(  .a(pc), .rd(instr));
+    dmem dmem(  .clk(clk),
+                .a(mem_d_a),
+                .wmask(mem_d_wmask),
+                .we(mem_d_we),
+                .wd(mem_d_wd), .rd(mem_d_rd));
 endmodule

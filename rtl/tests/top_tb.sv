@@ -7,14 +7,14 @@ module top_tb();
 
     initial
         begin
-            reset <= 5; #20 reset <= 0; #5;
+            reset <= 1; #1 reset <= 0; #1;
     end
 
-    // generate clock to sequence tests
-    always
-        begin
-            clk <= 1; #5; clk <= 0; #5;
-        end
+    //clock generation
+    initial begin
+        clk = 1'b0;
+        forever #1 clk = ~clk;
+    end
 
     // check results
     always @(negedge clk)

@@ -2,10 +2,10 @@
 
 
 module alu(input    logic [31:0]    a, b,
-           input    logic [3:0]     aluop,
+           input    logic [3:0]     op,
            output   logic [31:0]    y);
     always_comb
-        case (aluop)
+        case (op)
             `EXE_ADD_OP:    y = a + b;
             `EXE_SUB_OP:    y = a - b;
             `EXE_XOR_OP:    y = a ^ b;

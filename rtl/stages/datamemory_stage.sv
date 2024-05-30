@@ -1,9 +1,10 @@
 `include "defines.sv"
+`include "controlsgs.sv"
 
 
 module datamemory_stage(    // Inputs
-                            input   logic [`REG_BUS]        alu_y, rdd2, pc_4,
-                            controlsgs_if                   controls,
+                            input   logic [`REG_BUS]        alu_y, rrd2, pc_4,
+                            input   controlsgs_t            controlsgs,
                             // Interconnects to Data Memory
                             input   logic [`MEM_DATA_BUS]   mem_rd,
                             output  logic                   mem_we,
@@ -18,22 +19,22 @@ module datamemory_stage(    // Inputs
 
 
     // Outputs to Data Memory
-    assign mem_a =      alu_y[31:0];
-    assign mem_we =     controls.mem_we;
-    write_mask_generator    wmg(.mem_wdsrc(controls.mem_wdsrc), .alu_y(alu_y),
-                                .mem_wmask(mem_wmask));
-    assign mem_wd =     rdd2;
+    assign mem_a =          alu_y[31:0];
+    assign mem_we =         controlsgs.mem_d_we;
+    write_mask_generator    wmg(.wdsrc(controlsgs.mem_d_wdsrc), .wa(alu_y),
+                                .wmask(mem_wmask));
+    assign mem_wd =         rrd2;
 
     // Output Selection of Data Memory
-    mux2 #(16)  muxrd16(.d1(mem_rd[15:0]), .d2(mem_rd[31:16]), .s(alu_y[1]),
+    mux2 #(16)  muxrd16(.d0(mem_rd[15:0]), .d1(mem_rd[31:16]), .s(alu_y[1]),
                         .y(rd16));
-    mux4 #(8)   muxrd8 (.d1(mem_rd[7:0]), .d2(mem_rd[15:8]),
-                        .d3(mem_rd[23:16]), .d4(mem_rd[31:24]),
+    mux4 #(8)   muxrd8 (.d0(mem_rd[7:0]), .d1(mem_rd[15:8]),
+                        .d2(mem_rd[23:16]), .d3(mem_rd[31:24]),
                         .s(alu_y[1:0]),
                         .y(rd8));
 
     always_comb
-        case (controls.dataout_src)
+        case (controlsgs.dataout_src)
             `EXE_DATAOUTSRC_ALUY:   dataout = alu_y;
             `EXE_DATAOUTSRC_PC4:    dataout = pc_4;
             `EXE_DATAOUTSRC_RD32:   dataout = mem_rd;
