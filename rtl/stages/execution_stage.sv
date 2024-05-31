@@ -16,7 +16,6 @@ module execution_stage(// Inputs from General
                         output  logic [`MEM_DATA_BUS]   rrd2,
                         output  logic [`REG_ADDR_BUS]   rd,
                         // Outputs to IF
-                        output  logic [`INSTR_ADDR_BUS] pc_4,
                         output  logic                   b_taken);
     logic [`REG_ADDR_BUS]   rs1, rs2;
     logic [`REG_BUS]        rrd1, imm;
@@ -48,6 +47,4 @@ module execution_stage(// Inputs from General
                                     .srca(srca), .srcb(srcb),
                                     .b_taken(b_taken));
 
-    // PC_4 and PC_IMM calculation
-    adder               add_pc4(    .a(pc), .b(4), .y(pc_4));
 endmodule

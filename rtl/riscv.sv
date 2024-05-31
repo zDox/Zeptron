@@ -12,10 +12,10 @@ module riscv (  input   logic                       clk, reset,
                 output  logic [`INSTR_ADDR_BUS]     mem_i_ra);
 
     // Instruction Fetch Stage declerations
-    logic [31:0]            f_instr, f_pc;
+    logic [31:0]            f_instr, f_pc, f_pc4;
 
     // Instruction Decode Stage declerations
-    logic [31:0]            d_instr, d_pc;
+    logic [31:0]            d_instr, d_pc, d_pc4;
     controlsgs_t            d_controlsgs;
 
     // Execute Stage declerations
@@ -41,27 +41,27 @@ module riscv (  input   logic                       clk, reset,
     fetch_stage stage1(         // Inputs
                                 .clk(clk), .reset(reset),
                                 .e_b_taken(e_b_taken),
-                                .e_alu_y(e_alu_y), .e_pc_4(e_pc_4),
+                                .e_alu_y(e_alu_y),
                                 // Interconnects to Instruction Memory
                                 .mem_i_rd(mem_i_rd), .mem_i_ra(mem_i_ra),
                                 // Outputs
-                                .instr(f_instr), .pc(f_pc));
+                                .instr(f_instr), .pc(f_pc), .pc_4(f_pc4));
 
     if_id_register reg_stage1(  // Inputs
                                 .clk(clk), .reset(reset),
-                                .f_instr(f_instr), .f_pc(f_pc),
+                                .f_instr(f_instr), .f_pc(f_pc), .f_pc4(f_pc4),
                                 // Outputs
-                                .d_instr(d_instr), .d_pc(d_pc));
+                                .d_instr(d_instr), .d_pc(d_pc), .d_pc4(d_pc4),);
 
 
     // Instruction Decode Stage
     decode_stage stage2(        .instr(d_instr), .controlsgs(d_controlsgs));
     id_ex_register reg_stage2(  // Inputs
                                 .clk(clk), .reset(reset),
-                                .d_instr(d_instr), .d_pc(d_pc),
+                                .d_instr(d_instr), .d_pc(d_pc), .d_pc4(d_pc4),
                                 .d_controlsgs(d_controlsgs),
                                 // Outputs
-                                .e_instr(e_instr), .e_pc(e_pc),
+                                .e_instr(e_instr), .e_pc(e_pc), .e_pc4(e_pc4),
                                 .e_controlsgs(e_controlsgs));
 
 
@@ -74,7 +74,7 @@ module riscv (  input   logic                       clk, reset,
                                 // Outputs to Stage Register EX/DM
                                 .rrd2(e_rrd2), .rd(e_rd),
                                 // Outputs to Stage IF
-                                .pc_4(e_pc_4), .b_taken(e_b_taken),
+                                .b_taken(e_b_taken),
                                 // Outputs to IF and DM
                                 .alu_y(e_alu_y));
 
