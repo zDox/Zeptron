@@ -8,5 +8,5 @@ module imem(input   logic [`INSTR_ADDR_BUS]     a,
     initial
         $readmemh("tests/imem.hex", RAM);
 
-    assign rd =  RAM[a];
+    assign rd =  RAM[a>>2];
 endmodule

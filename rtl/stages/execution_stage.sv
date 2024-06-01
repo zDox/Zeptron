@@ -21,9 +21,10 @@ module execution_stage(// Inputs from General
     logic [`REG_BUS]        rrd1, imm;
     logic [`REG_BUS]        srca, srcb;
 
-    // Determine rs1 and rs2
+    // Determine rs1, rs2 and rd
     assign rs1 = instr[19:15];
     assign rs2 = instr[24:20];
+    assign rd  = instr[11:7];
 
     register_file       reg_file(   .clk(clk), .reset(reset),
                                     .ra1(rs1), .ra2(rs2),

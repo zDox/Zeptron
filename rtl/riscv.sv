@@ -12,16 +12,16 @@ module riscv (  input   logic                       clk, reset,
                 output  logic [`INSTR_ADDR_BUS]     mem_i_ra);
 
     // Instruction Fetch Stage declerations
-    logic [31:0]            f_instr, f_pc, f_pc4;
+    logic [`INSTR_BUS]      f_instr, f_pc, f_pc4;
 
     // Instruction Decode Stage declerations
-    logic [31:0]            d_instr, d_pc, d_pc4;
+    logic [`INSTR_BUS]      d_instr, d_pc, d_pc4;
     controlsgs_t            d_controlsgs;
 
     // Execute Stage declerations
-    logic [31:0]            e_instr, e_pc;
+    logic [`INSTR_BUS]      e_instr, e_pc;
     controlsgs_t            e_controlsgs;
-    logic [31:0]            e_alu_y, e_rrd2, e_pc_4;
+    logic [`INSTR_BUS]      e_alu_y, e_rrd2, e_pc_4;
     logic                   e_b_taken;
     logic [`REG_ADDR_BUS]   e_rd;
 
@@ -32,7 +32,7 @@ module riscv (  input   logic                       clk, reset,
 
     // Writeback Stage declerations
     controlsgs_t            w_controlsgs;
-    logic                   w_regwrite;
+    logic                   w_regwe;
     logic [31:0]            w_dataout;
     logic [`REG_ADDR_BUS]   w_rd;
 
@@ -48,16 +48,16 @@ module riscv (  input   logic                       clk, reset,
                                 .instr(f_instr), .pc(f_pc), .pc_4(f_pc4));
 
     if_id_register reg_stage1(  // Inputs
-                                .clk(clk), .reset(reset),
+                                .clk(clk), .reset(reset), .enable(1'b1),
                                 .f_instr(f_instr), .f_pc(f_pc), .f_pc4(f_pc4),
                                 // Outputs
-                                .d_instr(d_instr), .d_pc(d_pc), .d_pc4(d_pc4),);
+                                .d_instr(d_instr), .d_pc(d_pc), .d_pc4(d_pc4));
 
 
     // Instruction Decode Stage
     decode_stage stage2(        .instr(d_instr), .controlsgs(d_controlsgs));
     id_ex_register reg_stage2(  // Inputs
-                                .clk(clk), .reset(reset),
+                                .clk(clk), .reset(reset), .enable(1'b1),
                                 .d_instr(d_instr), .d_pc(d_pc), .d_pc4(d_pc4),
                                 .d_controlsgs(d_controlsgs),
                                 // Outputs
@@ -79,7 +79,7 @@ module riscv (  input   logic                       clk, reset,
                                 .alu_y(e_alu_y));
 
     ex_dm_register reg_stage3(  // Inputs
-                                .clk(clk), .reset(reset),
+                                .clk(clk), .reset(reset), .enable(1'b1),
                                 .e_controlsgs(e_controlsgs),
                                 .e_alu_y(e_alu_y), .e_rrd2(e_rrd2), .e_pc_4(e_pc_4),
                                 .e_rd(e_rd),
@@ -99,7 +99,7 @@ module riscv (  input   logic                       clk, reset,
                                 // Output
                                 .dataout(m_dataout));
 
-    dm_wb_register reg_stage4(  .clk(clk), .reset(reset),
+    dm_wb_register reg_stage4(  .clk(clk), .reset(reset), .enable(1'b1),
                                 // Inputs
                                 .m_controlsgs(m_controlsgs),
                                 .m_dataout(m_dataout),
@@ -110,5 +110,5 @@ module riscv (  input   logic                       clk, reset,
                                 .w_rd(w_rd));
 
     writeback_stage stage5(     .controlsgs(w_controlsgs),
-                                .regwrite(w_regwrite));
+                                .regwe(w_regwe));
 endmodule

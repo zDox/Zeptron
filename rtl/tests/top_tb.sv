@@ -7,7 +7,7 @@ module top_tb();
 
     initial
         begin
-            reset <= 1; #1 reset <= 0; #1;
+            reset <= 1; #2 reset <= 0; #2;
     end
 
     //clock generation

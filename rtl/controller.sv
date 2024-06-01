@@ -182,14 +182,26 @@ module controller (
             end
 
             `OP_ILLEGAL_H, `OP_ILLEGAL_L : controlsgs = {
-                alu_op:             1'bx,
-                alu_srca:           `EXE_ALUSRCA_RRD1,
-                alu_srcb:           `EXE_ALUSRCB_RRD2,
-                mem_d_wdsrc:        2'bxx,
+                alu_op:             'x,
+                alu_srca:           'x,
+                alu_srcb:           'x,
+                mem_d_wdsrc:        'x,
                 mem_d_we:           1'b0,
-                dataout_src:        `EXE_DATAOUTSRC_ALUY,
+                dataout_src:        'x,
                 reg_we:             1'b0,
-                immg_op:            4'bxxxx,
+                immg_op:            'x,
+                bj_op:              `EXE_BJOP_NOOP
+            };
+
+            default : controlsgs = {
+                alu_op:             'x,
+                alu_srca:           'x,
+                alu_srcb:           'x,
+                mem_d_wdsrc:        'x,
+                mem_d_we:           1'b0,
+                dataout_src:        'x,
+                reg_we:             1'b0,
+                immg_op:            'x,
                 bj_op:              `EXE_BJOP_NOOP
             };
         endcase
