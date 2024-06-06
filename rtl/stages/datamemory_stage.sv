@@ -3,7 +3,7 @@
 
 
 module datamemory_stage(    // Inputs
-                            input   logic [`REG_BUS]        alu_y, rrd2, pc_4,
+                            input   logic [`REG_BUS]        alu_y, rrd2, pc4,
                             input   controlsgs_t            controlsgs,
                             // Interconnects to Data Memory
                             input   logic [`MEM_DATA_BUS]   mem_rd,
@@ -36,7 +36,7 @@ module datamemory_stage(    // Inputs
     always_comb
         case (controlsgs.dataout_src)
             `EXE_DATAOUTSRC_ALUY:   dataout = alu_y;
-            `EXE_DATAOUTSRC_PC4:    dataout = pc_4;
+            `EXE_DATAOUTSRC_PC4:    dataout = pc4;
             `EXE_DATAOUTSRC_RD32:   dataout = mem_rd;
             `EXE_DATAOUTSRC_RDS16:  dataout = {{16{rd16[15]}}, rd16};
             `EXE_DATAOUTSRC_RDZ16:  dataout = {{16{1'b0}}, rd16};

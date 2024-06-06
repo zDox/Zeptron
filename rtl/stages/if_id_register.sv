@@ -1,8 +1,7 @@
 `include "defines.sv"
 
 
-module if_id_register(  input   logic           clk, reset,
-                        input   logic           enable,
+module if_id_register(  input   logic           clk, reset, clear, enable,
                         input   logic[31:0]     f_instr, f_pc, f_pc4,
                         output  logic[31:0]     d_instr, d_pc, d_pc4);
     typedef struct packed {
@@ -13,6 +12,8 @@ module if_id_register(  input   logic           clk, reset,
 
     always_ff @(posedge clk or posedge reset)
         if (reset)
+            d_bundle <= '0;
+        else if (clear)
             d_bundle <= '0;
         else if (enable)
             d_bundle <= { f_instr, f_pc, f_pc4};

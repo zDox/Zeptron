@@ -1,7 +1,7 @@
 `include "controlsgs.sv"
 
 
-module id_ex_register(  input   logic           clk, reset, enable,
+module id_ex_register(  input   logic           clk, reset, clear, enable,
                         input   logic [31:0]    d_instr, d_pc, d_pc4,
                         input   controlsgs_t    d_controlsgs,
                         output  logic [31:0]    e_instr, e_pc, e_pc4,
@@ -15,6 +15,8 @@ module id_ex_register(  input   logic           clk, reset, enable,
 
     always_ff @(posedge clk or posedge reset)
         if (reset)
+            e_bundle <= '0;
+        else if (clear)
             e_bundle <= '0;
         else if (enable)
             e_bundle <= {d_instr, d_pc, d_pc4, d_controlsgs};

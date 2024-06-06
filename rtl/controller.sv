@@ -14,7 +14,7 @@ module controller (
                 alu_op:             `EXE_ADD_OP,
                 alu_srca:           `EXE_ALUSRCA_ZERO,
                 alu_srcb:           `EXE_ALUSRCB_IMM,
-                mem_d_wdsrc:        2'bxx,
+                mem_d_wdsrc:        'x,
                 mem_d_we:           1'b0,
                 dataout_src:        `EXE_DATAOUTSRC_ALUY,
                 reg_we:             1'b1,
@@ -26,7 +26,7 @@ module controller (
                 alu_op:             `EXE_ADD_OP,
                 alu_srca:           `EXE_ALUSRCA_PC,
                 alu_srcb:           `EXE_ALUSRCB_IMM,
-                mem_d_wdsrc:        2'bxx,
+                mem_d_wdsrc:        'x,
                 mem_d_we:           1'b0,
                 dataout_src:        `EXE_DATAOUTSRC_ALUY,
                 reg_we:             1'b1,
@@ -38,7 +38,7 @@ module controller (
                 alu_op:             `EXE_ADD_OP,
                 alu_srca:           `EXE_ALUSRCA_PC,
                 alu_srcb:           `EXE_ALUSRCB_IMM,
-                mem_d_wdsrc:        2'bxx,
+                mem_d_wdsrc:        'x,
                 mem_d_we:           1'b0,
                 dataout_src:        `EXE_DATAOUTSRC_PC4,
                 reg_we:             1'b1,
@@ -50,7 +50,7 @@ module controller (
                 alu_op:             `EXE_ADD_OP,
                 alu_srca:           `EXE_ALUSRCA_RRD1,
                 alu_srcb:           `EXE_ALUSRCB_IMM,
-                mem_d_wdsrc:        2'bxx,
+                mem_d_wdsrc:        'x,
                 mem_d_we:           1'b0,
                 dataout_src:        `EXE_DATAOUTSRC_PC4,
                 reg_we:             1'b1,
@@ -63,9 +63,9 @@ module controller (
                     alu_op:             `EXE_ADD_OP,
                     alu_srca:           `EXE_ALUSRCA_PC,
                     alu_srcb:           `EXE_ALUSRCB_IMM,
-                    mem_d_wdsrc:        2'bxx,
+                    mem_d_wdsrc:        'x,
                     mem_d_we:           1'b0,
-                    dataout_src:        3'bxxx,
+                    dataout_src:        'x,
                     reg_we:             1'b0,
                     immg_op:            `IMMG_OP_B,
                     bj_op:              `EXE_BJOP_NOOP
@@ -87,9 +87,9 @@ module controller (
                     alu_op:             `EXE_ADD_OP,
                     alu_srca:           `EXE_ALUSRCA_RRD1,
                     alu_srcb:           `EXE_ALUSRCB_IMM,
-                    mem_d_wdsrc:        2'bxx,
+                    mem_d_wdsrc:        'x,
                     mem_d_we:           1'b0,
-                    dataout_src:        3'bxxx,
+                    dataout_src:        'x,
                     reg_we:             1'b1,
                     immg_op:            `IMMG_OP_I,
                     bj_op:              `EXE_BJOP_NOOP
@@ -101,7 +101,7 @@ module controller (
                     `FUNCT3_LW:     controlsgs.dataout_src = `EXE_DATAOUTSRC_RD32;
                     `FUNCT3_LBU:    controlsgs.dataout_src = `EXE_DATAOUTSRC_RDZ8;
                     `FUNCT3_LHU:    controlsgs.dataout_src = `EXE_DATAOUTSRC_RDZ16;
-                    default:        controlsgs.dataout_src = 3'bxxx;
+                    default:        controlsgs.dataout_src = 'x;
                 endcase
             end
 
@@ -110,9 +110,9 @@ module controller (
                     alu_op:             `EXE_ADD_OP,
                     alu_srca:           `EXE_ALUSRCA_RRD1,
                     alu_srcb:           `EXE_ALUSRCB_IMM,
-                    mem_d_wdsrc:        2'bxx,
+                    mem_d_wdsrc:        'x,
                     mem_d_we:           1'b1,
-                    dataout_src:        3'bxxx,
+                    dataout_src:        'x,
                     reg_we:             1'b0,
                     immg_op:            `IMMG_OP_S,
                     bj_op:              `EXE_BJOP_NOOP
@@ -122,7 +122,7 @@ module controller (
                     `FUNCT3_SB:     controlsgs.mem_d_wdsrc = `EXE_MEMWDSRC_B;
                     `FUNCT3_SH:     controlsgs.mem_d_wdsrc = `EXE_MEMWDSRC_H;
                     `FUNCT3_SW:     controlsgs.mem_d_wdsrc = `EXE_MEMWDSRC_W;
-                    default:        controlsgs.mem_d_wdsrc = 2'bxx;
+                    default:        controlsgs.mem_d_wdsrc = 'x;
                 endcase
             end
 
@@ -131,7 +131,7 @@ module controller (
                     alu_op:             `EXE_ADD_OP,
                     alu_srca:           `EXE_ALUSRCA_RRD1,
                     alu_srcb:           `EXE_ALUSRCB_IMM,
-                    mem_d_wdsrc:        2'bxx,
+                    mem_d_wdsrc:        'x,
                     mem_d_we:           1'b0,
                     dataout_src:        `EXE_DATAOUTSRC_ALUY,
                     reg_we:             1'b1,
@@ -149,7 +149,7 @@ module controller (
                     `FUNCT3_SLLI:       controlsgs.alu_op = `EXE_SLL_OP;
                     `FUNCT3_SRLI_SRAI:  controlsgs.alu_op = (funct7 == `FUNCT7_SRLI) ? `EXE_SRL_OP :
                                                                                         `EXE_SRA_OP;
-                    default:            controlsgs.alu_op = 4'bxxxx;
+                    default:            controlsgs.alu_op = 'bx;
                 endcase
             end
 
@@ -158,7 +158,7 @@ module controller (
                     alu_op:             `EXE_ADD_OP,
                     alu_srca:           `EXE_ALUSRCA_RRD1,
                     alu_srcb:           `EXE_ALUSRCB_RRD2,
-                    mem_d_wdsrc:        2'bxx,
+                    mem_d_wdsrc:        'x,
                     mem_d_we:           1'b0,
                     dataout_src:        `EXE_DATAOUTSRC_ALUY,
                     reg_we:             1'b1,
@@ -177,7 +177,7 @@ module controller (
                     `FUNCT3_SLL:        controlsgs.alu_op = `EXE_SLL_OP;
                     `FUNCT3_SRL_SRA:    controlsgs.alu_op = (funct7 == `FUNCT7_SRL) ?   `EXE_SRL_OP:
                                                                                         `EXE_SRA_OP;
-                    default:            controlsgs.alu_op = 4'bxxxx;
+                    default:            controlsgs.alu_op = 'bx;
                 endcase
             end
 

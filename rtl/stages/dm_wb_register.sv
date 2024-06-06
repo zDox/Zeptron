@@ -2,7 +2,7 @@
 `include "controlsgs.sv"
 
 
-module dm_wb_register(  input   logic           clk, reset, enable,
+module dm_wb_register(  input   logic           clk, reset, clear, enable,
                         input   controlsgs_t    m_controlsgs,
                         input   [`REG_BUS]      m_dataout,
                         input   [`REG_ADDR_BUS] m_rd,
@@ -15,11 +15,13 @@ module dm_wb_register(  input   logic           clk, reset, enable,
         logic   [`REG_ADDR_BUS] rd;
         controlsgs_t            controlsgs;
     } bundle_t;
-    
+
     bundle_t w_bundle;
 
     always_ff @(posedge clk or posedge reset)
         if (reset)
+            w_bundle <= '0;
+        else if (clear)
             w_bundle <= '0;
         else if (enable)
             w_bundle <= { m_dataout, m_rd, m_controlsgs};
