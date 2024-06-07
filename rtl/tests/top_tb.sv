@@ -19,5 +19,6 @@ module top_tb();
     // check results
     always @(negedge clk)
         begin
+            $display("Test");
         end
 endmodule
