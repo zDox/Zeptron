@@ -128,27 +128,40 @@
 `define EXE_DATAOUTSRC_RDS8     3'b101
 `define EXE_DATAOUTSRC_RDZ8     3'b110
 
+//================== Hazard Forward SRC A
+`define EXE_FORWARDSRC_RRD1_NO  2'b00
+`define EXE_FORWARDSRC_RRD1_DM  2'b01
+`define EXE_FORWARDSRC_RRD1_WB  2'b10
+
+//================== Hazard Forward SRC B
+`define EXE_FORWARDSRC_RRD2_NO  2'b00
+`define EXE_FORWARDSRC_RRD2_DM  2'b01
+`define EXE_FORWARDSRC_RRD2_WB  2'b10
+
 //==================  Hardware Properties ==================
 
 // Instruction Memory
-`define INSTR_ADDR_BUS 31:0
-`define INSTR_BUS 31:0
+`define INSTR_ADDR_BUS  31:0
+`define INSTR_BUS       31:0
 
 // Register File
-`define REG_ADDR_BUS 4:0
-`define REG_BUS 31:0
+`define REG_ADDR_BUS    4:0
+`define REG_BUS         31:0
 
 // Memory
-`define MEM_ADDR_BUS 31:0
-`define MEM_DATA_BUS 31:0
-`define MEM_WMASK_BUS 7:0
+`define MEM_ADDR_BUS    31:0
+`define MEM_DATA_BUS    31:0
+`define MEM_WMASK_BUS   7:0
 
 // Control Signal
-`define ALU_OP_BUS 3:0
-`define ALU_SRCA_SEL 1:0
-`define IMMG_OP_BUS 2:0
-`define BJ_OP_BUS 2:0
+`define ALU_OP_BUS      3:0
+`define ALU_SRCA_SEL    1:0
+`define IMMG_OP_BUS     2:0
+`define BJ_OP_BUS       2:0
 `define DATAOUT_SRC_BUS 2:0
 `define MEM_D_WDSRC_BUS 2:0
+
+// Hazard Signal
+`define FORWARDSRC_BUS  1:0
 
 `endif

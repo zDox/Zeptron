@@ -28,30 +28,33 @@ module riscv (  input   logic                       clk, reset,
     logic [`REG_ADDR_BUS]   e_rd, e_rs1, e_rs2;
 
     // Data Memory Stage declerations
-    logic [31:0]            m_alu_y, m_dataout, m_rrd2, m_pc4;
+    logic [31:0]            m_instr, m_alu_y, m_dataout, m_rrd2, m_pc4;
     controlsgs_t            m_controlsgs;
-    logic [`REG_ADDR_BUS]   m_rd;
 
     // Writeback Stage declerations
     controlsgs_t            w_controlsgs;
     logic                   w_regwe;
-    logic [31:0]            w_dataout;
+    logic [31:0]            w_instr, w_dataout;
     logic [`REG_ADDR_BUS]   w_rd;
+    assign w_rd  = w_instr[11:7];
 
     // Hazard declerations
-    logic                   forward_rrd1, forward_rrd2;
+    logic [`FORWARDSRC_BUS] forward_rrd1, forward_rrd2;
     logic                   flush_if_id, flush_id_ex, flush_ex_dm, flush_dm_wb;
     logic                   stall_f, stall_if_id, stall_id_ex, stall_ex_dm, stall_dm_wb;
 
-    hazard_unit hz (    // From EX
-                        .e_b_taken(e_b_taken), .e_alu_srcb(e_controlsgs.alu_srcb),
+    hazard_unit hz (    .d_instr(e_instr),
+                        .d_alu_srcb(d_controlsgs.alu_srcb),
+                        // From EX
+                        .e_b_taken(e_b_taken),
                         .e_instr(e_instr),
                         // From DM
                         .m_reg_we(m_controlsgs.reg_we),
-                        .m_rd(m_rd),
+                        .m_instr(m_instr),
+                        .m_dataout_src(m_controlsgs.dataout_src),
                         // From WB
                         .w_reg_we(w_controlsgs.reg_we),
-                        .w_rd(w_rd),
+                        .w_instr(w_instr),
                         // Outputs
                         .forward_rrd1(forward_rrd1), .forward_rrd2(forward_rrd2),
                         .flush_if_id(flush_if_id), . flush_id_ex(flush_id_ex),
@@ -103,27 +106,25 @@ module riscv (  input   logic                       clk, reset,
     execution_stage stage3(     // Inputs from Hazard Unit
                                 .forward_rrd1(forward_rrd1), .forward_rrd2(forward_rrd2),
                                 // Inputs from Stage Register IF/ID
-                                .instr(e_instr), .pc(e_pc), .controlsgs(e_controlsgs),
+                                .pc(e_pc), .controlsgs(e_controlsgs),
                                 .rrd1(e_rrd1), .rrd2(e_rrd2), .imm(e_imm),
                                 // Inputs from WB
                                 .w_regwd(w_dataout), .m_regwd(m_dataout),
                                 // Outputs to Stage IF
                                 .b_taken(e_b_taken),
                                 // Outputs to IF and DM
-                                .alu_y(e_alu_y),
-                                // Outputs to Stage Register EX/DM
-                                .rd(e_rd));
+                                .alu_y(e_alu_y));
 
     ex_dm_register reg_stage3(  // Inputs
                                 .clk(clk), .reset(reset),
                                 .clear(flush_ex_dm), .enable(~stall_ex_dm),
                                 .e_controlsgs(e_controlsgs),
                                 .e_alu_y(e_alu_y), .e_rrd2(e_rrd2), .e_pc4(e_pc4),
-                                .e_rd(e_rd),
+                                .e_instr(e_instr),
                                 // Outputs
                                 .m_controlsgs(m_controlsgs),
                                 .m_alu_y(m_alu_y), .m_rrd2(m_rrd2), .m_pc4(m_pc4),
-                                .m_rd(m_rd));
+                                .m_instr(m_instr));
 
 
     // Data Memory Stage
@@ -141,11 +142,11 @@ module riscv (  input   logic                       clk, reset,
                                 // Inputs
                                 .m_controlsgs(m_controlsgs),
                                 .m_dataout(m_dataout),
-                                .m_rd(m_rd),
+                                .m_instr(m_instr),
                                 // Outputs
                                 .w_controlsgs(w_controlsgs),
                                 .w_dataout(w_dataout),
-                                .w_rd(w_rd));
+                                .w_instr(w_instr));
 
     writeback_stage stage5(     .controlsgs(w_controlsgs),
                                 .regwe(w_regwe));

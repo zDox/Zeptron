@@ -5,14 +5,14 @@
 module dm_wb_register(  input   logic           clk, reset, clear, enable,
                         input   controlsgs_t    m_controlsgs,
                         input   [`REG_BUS]      m_dataout,
-                        input   [`REG_ADDR_BUS] m_rd,
+                        input   [`INSTR_BUS]    m_instr,
 
                         output  [`REG_BUS]      w_dataout,
-                        output  [`REG_ADDR_BUS] w_rd,
+                        output  [`INSTR_BUS]    w_instr,
                         output  controlsgs_t    w_controlsgs);
     typedef struct packed {
         logic   [`REG_BUS]      dataout;
-        logic   [`REG_ADDR_BUS] rd;
+        logic   [`INSTR_BUS]    instr;
         controlsgs_t            controlsgs;
     } bundle_t;
 
@@ -24,7 +24,7 @@ module dm_wb_register(  input   logic           clk, reset, clear, enable,
         else if (clear)
             w_bundle <= '0;
         else if (enable)
-            w_bundle <= { m_dataout, m_rd, m_controlsgs};
+            w_bundle <= { m_dataout, m_instr, m_controlsgs};
 
-    assign {w_dataout, w_rd, w_controlsgs} = w_bundle;
+    assign {w_dataout, w_instr, w_controlsgs} = w_bundle;
 endmodule
