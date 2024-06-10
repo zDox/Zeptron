@@ -16,12 +16,14 @@ module riscv (  input   logic                       clk, reset,
 
     // Instruction Decode Stage declerations
     logic [`INSTR_BUS]      d_instr, d_pc, d_pc4;
+    logic [`REG_BUS]        d_rrd1, d_rrd2, d_imm;
     controlsgs_t            d_controlsgs;
 
     // Execute Stage declerations
     logic [`INSTR_BUS]      e_instr, e_pc;
     controlsgs_t            e_controlsgs;
-    logic [`INSTR_BUS]      e_alu_y, e_rrd2, e_pc4;
+    logic [`INSTR_BUS]      e_alu_y, e_pc4;
+    logic [`REG_BUS]        e_rrd1, e_rrd2, e_imm;
     logic                   e_b_taken;
     logic [`REG_ADDR_BUS]   e_rd, e_rs1, e_rs2;
 
@@ -43,7 +45,7 @@ module riscv (  input   logic                       clk, reset,
 
     hazard_unit hz (    // From EX
                         .e_b_taken(e_b_taken), .e_alu_srcb(e_controlsgs.alu_srcb),
-                        .e_rs1(e_rs1), .e_rs2(e_rs2),
+                        .e_instr(e_instr),
                         // From DM
                         .m_reg_we(m_controlsgs.reg_we),
                         .m_rd(m_rd),
@@ -77,33 +79,40 @@ module riscv (  input   logic                       clk, reset,
 
 
     // Instruction Decode Stage
-    decode_stage stage2(        .instr(d_instr), .controlsgs(d_controlsgs));
+    decode_stage stage2(        .clk(clk), .reset(reset),
+                                .instr(d_instr),
+                                // Inputs from Stage WB
+                                .regwe(w_regwe), .regwa(w_rd), .regwd(w_dataout),
+                                // Ouputs to EX
+                                .controlsgs(d_controlsgs), .rrd1(d_rrd1), .rrd2(d_rrd2),
+                                .imm(d_imm));
     id_ex_register reg_stage2(  // Inputs
                                 .clk(clk), .reset(reset),
                                 .clear(flush_id_ex), .enable(~stall_id_ex),
+                                // Inputs from IF
                                 .d_instr(d_instr), .d_pc(d_pc), .d_pc4(d_pc4),
                                 .d_controlsgs(d_controlsgs),
-                                // Outputs
+                                .d_rrd1(d_rrd1), .d_rrd2(d_rrd2), .d_imm,
+                                // Outputs to EX
                                 .e_instr(e_instr), .e_pc(e_pc), .e_pc4(e_pc4),
-                                .e_controlsgs(e_controlsgs));
+                                .e_controlsgs(e_controlsgs),
+                                .e_rrd1(e_rrd1), .e_rrd2(e_rrd2), .e_imm);
 
 
     // Execute Stage
-    execution_stage stage3(     .clk(clk), .reset(reset),
-                                // Inputs from Hazard Unit
+    execution_stage stage3(     // Inputs from Hazard Unit
                                 .forward_rrd1(forward_rrd1), .forward_rrd2(forward_rrd2),
                                 // Inputs from Stage Register IF/ID
                                 .instr(e_instr), .pc(e_pc), .controlsgs(e_controlsgs),
-                                // Inputs from Stage Register EX/WB
-                                .regwe(w_regwe), .regwa(w_rd), .regwd(w_dataout),
-                                // Outputs to Hazard funit
-                                .rs1(e_rs1), .rs2(e_rs2),
+                                .rrd1(e_rrd1), .rrd2(e_rrd2), .imm(e_imm),
+                                // Inputs from WB
+                                .w_regwd(w_dataout), .m_regwd(m_dataout),
                                 // Outputs to Stage IF
                                 .b_taken(e_b_taken),
                                 // Outputs to IF and DM
                                 .alu_y(e_alu_y),
                                 // Outputs to Stage Register EX/DM
-                                .rrd2(e_rrd2), .rd(e_rd));
+                                .rd(e_rd));
 
     ex_dm_register reg_stage3(  // Inputs
                                 .clk(clk), .reset(reset),

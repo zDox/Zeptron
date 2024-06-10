@@ -3,7 +3,7 @@
 
 module hazard_unit (// Inputs from Execution Stage
                     input   logic                   e_b_taken, e_alu_srcb,
-                    input   logic [`REG_ADDR_BUS]   e_rs1, e_rs2,
+                    input   logic [`INSTR_BUS]      e_instr,
                     // Inputs from Data Memory Stage
                     input   logic                   m_reg_we,
                     input   logic [`REG_ADDR_BUS]   m_rd,
@@ -21,6 +21,14 @@ module hazard_unit (// Inputs from Execution Stage
     logic  stall;
 
     assign {stall_f, stall_if_id, stall_id_ex, stall_ex_dm } = {4{stall}};
+
+
+    logic   [`REG_ADDR_BUS]     e_rs1, e_rs2, e_rd;
+
+    // Determine rs1, rs2 and rd
+    assign e_rs1 = e_instr[19:15];
+    assign e_rs2 = e_instr[24:20];
+    assign e_rd  = e_instr[11:7];
 
     // Control Hazards
     assign flush_if_id = e_b_taken;
