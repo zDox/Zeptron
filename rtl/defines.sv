@@ -151,7 +151,7 @@
 // Memory
 `define MEM_ADDR_BUS    31:0
 `define MEM_DATA_BUS    31:0
-`define MEM_WMASK_BUS   7:0
+`define MEM_WMASK_BUS   3:0
 
 // Control Signal
 `define ALU_OP_BUS      3:0
