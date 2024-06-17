@@ -24,6 +24,7 @@ module riscv (  input   logic                       clk, reset,
     controlsgs_t            e_controlsgs;
     logic [`INSTR_BUS]      e_alu_y, e_pc4;
     logic [`REG_BUS]        e_rrd1, e_rrd2, e_imm;
+    logic [`REG_BUS]        e_rrd1_fwd, e_rrd2_fwd;
     logic                   e_b_taken;
     logic [`REG_ADDR_BUS]   e_rd, e_rs1, e_rs2;
 
@@ -113,13 +114,14 @@ module riscv (  input   logic                       clk, reset,
                                 // Outputs to Stage IF
                                 .b_taken(e_b_taken),
                                 // Outputs to IF and DM
+                                .rrd1_fwd(e_rrd1_fwd), .rrd2_fwd(e_rrd2_fwd),
                                 .alu_y(e_alu_y));
 
     ex_dm_register reg_stage3(  // Inputs
                                 .clk(clk), .reset(reset),
                                 .clear(flush_ex_dm), .enable(~stall_ex_dm),
                                 .e_controlsgs(e_controlsgs),
-                                .e_alu_y(e_alu_y), .e_rrd2(e_rrd2), .e_pc4(e_pc4),
+                                .e_alu_y(e_alu_y), .e_rrd2(e_rrd2_fwd), .e_pc4(e_pc4),
                                 .e_instr(e_instr),
                                 // Outputs
                                 .m_controlsgs(m_controlsgs),

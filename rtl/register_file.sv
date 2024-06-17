@@ -9,6 +9,19 @@ module register_file(input logic        clk, reset,
         if (we3) rf[wa3] <= wd3;
 
     // Read operation
-    assign rd1 = (ra1 == 0) ? 32'b0 : rf[ra1];
-    assign rd2 = (ra2 == 0) ? 32'b0 : rf[ra2];
+    always_comb begin
+        if (ra1 == 0)
+            rd1 = '0;
+        else if (ra1 == wa3 && we3)
+            rd1 = wd3;
+        else
+            rd1 = rf[ra1];
+
+        if (ra2 == 0)
+            rd2 = '0;
+        else if (ra2 == wa3 && we3)
+            rd2 = wd3;
+        else
+            rd2 = rf[ra2];
+    end
 endmodule

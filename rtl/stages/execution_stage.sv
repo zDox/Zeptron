@@ -12,9 +12,9 @@ module execution_stage( // Inputs from Hazard Unit
                         // Outputs to IF
                         output  logic                   b_taken,
                         // Output to IF and DM
+                        output  logic [`REG_BUS]        rrd1_fwd, rrd2_fwd,
                         output  logic [`MEM_DATA_BUS]   alu_y);
 
-    logic [`REG_BUS]        rrd1_fwd, rrd2_fwd;
     logic [`REG_BUS]        srca, srcb;
 
 

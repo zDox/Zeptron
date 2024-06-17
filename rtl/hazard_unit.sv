@@ -64,18 +64,18 @@ module hazard_unit (
     // forwarding
     always_comb begin
         // Forwarding in case of rrd1
-        if (((e_rs1 != 0) && (w_rd == e_rs1)) && w_reg_we)
-            forward_rrd1 =  `EXE_FORWARDSRC_RRD1_WB;
-        else if ((e_rs1 != 0) && (m_rd==e_rs1) && m_reg_we)
+        if ((e_rs1 != 0) && (m_rd==e_rs1) && m_reg_we)
             forward_rrd1 =  `EXE_FORWARDSRC_RRD1_DM;
+        else if (((e_rs1 != 0) && (w_rd == e_rs1)) && w_reg_we)
+            forward_rrd1 =  `EXE_FORWARDSRC_RRD1_WB;
         else
             forward_rrd1 =  `EXE_FORWARDSRC_RRD1_NO;
 
         // Forwarding in case of rrd2
-        if ((e_rs2 != 0) && (w_rd==e_rs2) && w_reg_we)
-            forward_rrd2 =  `EXE_FORWARDSRC_RRD2_WB;
-        else if ((e_rs2 != 0) && (m_rd==e_rs2) && m_reg_we)
+        if ((e_rs2 != 0) && (m_rd==e_rs2) && m_reg_we)
             forward_rrd2 =  `EXE_FORWARDSRC_RRD2_DM;
+        else if ((e_rs2 != 0) && (w_rd==e_rs2) && w_reg_we)
+            forward_rrd2 =  `EXE_FORWARDSRC_RRD2_WB;
         else
             forward_rrd2 =  `EXE_FORWARDSRC_RRD2_NO;
     end
