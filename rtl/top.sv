@@ -16,10 +16,16 @@ module top(input logic clk, reset);
                 .mem_d_wd(mem_d_wd),
                 .mem_i_ra(pc));
 
-    imem imem(  .a(pc), .rd(instr));
-    dmem dmem(  .clk(clk),
-                .a(mem_d_a),
-                .wmask(mem_d_wmask),
-                .we(mem_d_we),
-                .wd(mem_d_wd), .rd(mem_d_rd));
+    dual_port_mem dual_mem(
+                .clk(clk),
+                // Data Memory
+                .we2(mem_d_we),
+                .w2mask(mem_d_wmask),
+                .a2(mem_d_a),
+                .wd2(mem_d_wd),
+                .rd2(mem_d_rd),
+                // Instruciton Memory
+                .a1(pc),
+                .rd1(instr)
+    );
 endmodule
