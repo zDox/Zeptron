@@ -1,9 +1,9 @@
-module top_tb();
+module top_tb #(parameter mem_content_path)();
 
     logic clk, reset;
 
 
-    top dut(.clk(clk), .reset(reset));
+    top #(mem_content_path) dut (.clk(clk), .reset(reset));
 
     initial
         begin

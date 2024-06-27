@@ -3,7 +3,7 @@ module pc (     input   logic       clk, reset, enable,
                 output  logic[31:0] y);
     always @(posedge clk, posedge reset)
         if (reset)
-            y <= '0;
+            y <= 32;
         else if (enable)
             y <= a;
 endmodule

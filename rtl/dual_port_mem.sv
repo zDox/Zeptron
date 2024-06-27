@@ -4,18 +4,19 @@
 // Instruction Memory is assigned to port 1
 // Data Memory is assigned to port 2
 
-module dual_port_mem(   input   logic                   clk, we2,
+module dual_port_mem #( parameter mem_content_path = "tests/my.hex")
+                    (   input   logic                   clk, we2,
                         input   logic [`MEM_WMASK_BUS]  w2mask,
                         input   logic [`MEM_ADDR_BUS]   a2,
                         input   logic [`MEM_DATA_BUS]   wd2,
                         input   logic [`INSTR_ADDR_BUS] a1,
                         output  logic [`INSTR_BUS]      rd1,
                         output  logic [`MEM_DATA_BUS]   rd2);
-    logic [31:0] RAM [2**8];
+    logic [31:0] RAM [8192];
 
     // Init
     initial
-        $readmemh("tests/my.hex", RAM);
+        $readmemh(mem_content_path, RAM);
 
     // asynchronous read from Memory
     assign rd2 = RAM[a2[31:2]]; // word aligned
