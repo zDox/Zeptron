@@ -1,4 +1,4 @@
-module top_tb #(parameter mem_content_path)();
+module top_tb #(parameter mem_content_path = "tests/my.hex")();
 
     logic clk, reset;
 
