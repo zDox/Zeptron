@@ -1,8 +1,4 @@
-`ifndef CONTROLSGS_SV
-`define CONTROLSGS_SV
-
 `include "defines.sv"
-
 
 typedef struct packed {
     // ALU Control
@@ -21,4 +17,3 @@ typedef struct packed {
 
 }   controlsgs_t;
 
-`endif
