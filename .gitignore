@@ -10,3 +10,4 @@ transcript
 *.vstf
 
 rtl/tests/my.hex
+rtl/tests/my.sig
