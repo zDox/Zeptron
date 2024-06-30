@@ -13,7 +13,7 @@ module dual_port_mem #( parameter mem_content_path,
                         input   logic [`INSTR_ADDR_BUS] a1,
                         output  logic [`INSTR_BUS]      rd1,
                         output  logic [`MEM_DATA_BUS]   rd2);
-    logic [31:0] RAM [8192];
+    logic [31:0] RAM [524288];
 
     // Init
     initial
