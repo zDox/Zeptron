@@ -6,7 +6,7 @@ module register_file(input logic        clk, reset,
     logic [31:0] rf [32];
 
     always_ff@(posedge clk)
-        if (we3) rf[wa3] <= wd3;
+        if (we3 && (wa3 != 0)) rf[wa3] <= wd3;
 
     // Read operation
     always_comb begin

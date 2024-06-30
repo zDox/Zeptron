@@ -8,3 +8,5 @@ transcript
 *.mpf
 *.mti
 *.vstf
+
+rtl/tests/my.hex
