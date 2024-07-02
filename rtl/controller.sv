@@ -54,7 +54,7 @@ module controller (
                 mem_d_we:           1'b0,
                 dataout_src:        `EXE_DATAOUTSRC_PC4,
                 reg_we:             1'b1,
-                immg_op:            `IMMG_OP_J,
+                immg_op:            `IMMG_OP_I,
                 bj_op:              `EXE_BJOP_JUMP
             };
 

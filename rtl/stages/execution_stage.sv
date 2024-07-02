@@ -50,7 +50,7 @@ module execution_stage( // Inputs from Hazard Unit
                                     .y(alu_y));
 
     jump_control        jc(         .bj_op(controlsgs.bj_op),
-                                    .srca(srca), .srcb(srcb),
+                                    .rrd1(rrd1_fwd), .rrd2(rrd2_fwd),
                                     .b_taken(b_taken));
 
 endmodule
